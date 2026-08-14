@@ -11,8 +11,15 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 
 /// Start YTSave API Group Code
 
+// Single source of truth for the engine base URL.
+// Local testing: http://localhost:3000  |  Production: your Railway/Firebase URL.
+const String kEngineBaseUrl = String.fromEnvironment(
+  'ENGINE_BASE_URL',
+  defaultValue: 'http://localhost:3000',
+);
+
 class YTSaveAPIGroup {
-  static String getBaseUrl() => 'https://tubesaver-production.up.railway.app';
+  static String getBaseUrl() => kEngineBaseUrl;
   static Map<String, String> headers = {};
   static DownloadCall downloadCall = DownloadCall();
   static FormatcheckVTreeCall formatcheckVTreeCall = FormatcheckVTreeCall();
@@ -163,7 +170,7 @@ class FormatChecker2Call {
 /// Start YTSaveVTwo Group Code
 
 class YTSaveVTwoGroup {
-  static String getBaseUrl() => 'https://tubesaver-production.up.railway.app';
+  static String getBaseUrl() => kEngineBaseUrl;
   static Map<String, String> headers = {};
   static GetTasksCall getTasksCall = GetTasksCall();
   static DownloadVTwooCall downloadVTwooCall = DownloadVTwooCall();

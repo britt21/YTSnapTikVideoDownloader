@@ -9,22 +9,23 @@ import 'lat_lng.dart';
 import 'place.dart';
 import 'uploaded_file.dart';
 
+// Single source of truth for the engine base URL.
+// Local testing: http://localhost:3000  |  Production: your Railway/Firebase URL.
+const String kEngineBaseUrl = String.fromEnvironment(
+  'ENGINE_BASE_URL',
+  defaultValue: 'http://localhost:3000',
+);
+
 String buildurl(
   String? videourl,
   String? videofomat,
 ) {
-  print('starrting::: ====' +
-      'https://tubesaver-production.up.railway.app/testdownload?url=${videourl}&fomat=${videofomat}');
-
-  return "https://tubesaver-production.up.railway.app/testdownload?url=${videourl}&fomat=${videofomat}";
+  return "$kEngineBaseUrl/testdownload?url=${videourl}&fomat=${videofomat}";
 }
 
 String buildurlmp3(
   String? videourl,
   String? videofomat,
 ) {
-  print('starrting::: ====' +
-      'https://tubesaver-production.up.railway.app/testdownloadmp3?url=${videourl}&fomat=${videofomat}');
-
-  return "https://tubesaver-production.up.railway.app/testdownloadmp3?url=${videourl}&fomat=${videofomat}";
+  return "$kEngineBaseUrl/testdownloadmp3?url=${videourl}&fomat=${videofomat}";
 }
