@@ -9,12 +9,16 @@ import 'lat_lng.dart';
 import 'place.dart';
 import 'uploaded_file.dart';
 
-// Single source of truth for the engine base URL.
-// Local testing: http://localhost:3000  |  Production: your Railway/Firebase URL.
-const String kEngineBaseUrl = String.fromEnvironment(
-  'ENGINE_BASE_URL',
-  defaultValue: 'http://localhost:3000',
-);
+// Engine base URL — same origin as the served page unless overridden at build.
+final String kEngineBaseUrl = _resolveEngineBaseUrl();
+String _resolveEngineBaseUrl() {
+  const fromEnv = String.fromEnvironment('ENGINE_BASE_URL', defaultValue: '');
+  if (fromEnv.isNotEmpty) return fromEnv;
+  final origin = Uri.base.origin;
+  return origin.isNotEmpty && origin.startsWith('http')
+      ? origin
+      : 'http://localhost:3000';
+}
 
 String buildurl(
   String? videourl,

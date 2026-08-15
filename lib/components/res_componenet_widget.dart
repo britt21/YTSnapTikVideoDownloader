@@ -2,7 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/flutter_flow/custom_functions.dart' as functions;
+import '/flutter_flow/download_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -109,8 +109,12 @@ class _ResComponenetWidgetState extends State<ResComponenetWidget> {
           ),
           FFButtonWidget(
             onPressed: () async {
-              await launchURL(functions.buildurl(
-                  widget!.videourl, widget!.videoQualityformat));
+              await downloadWithProgress(
+                context,
+                url: widget!.videourl ?? '',
+                fomat: widget!.videoQualityformat ?? '',
+                isAudio: false,
+              );
             },
             text: 'Download',
             options: FFButtonOptions(

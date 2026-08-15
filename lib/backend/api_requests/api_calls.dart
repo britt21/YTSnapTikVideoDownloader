@@ -12,11 +12,19 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start YTSave API Group Code
 
 // Single source of truth for the engine base URL.
-// Local testing: http://localhost:3000  |  Production: your Railway/Firebase URL.
-const String kEngineBaseUrl = String.fromEnvironment(
-  'ENGINE_BASE_URL',
-  defaultValue: 'http://localhost:3000',
-);
+// If ENGINE_BASE_URL is provided at build time it wins; otherwise we use the
+// SAME ORIGIN the page is served from (the Railway service serves both the site
+// and the API), which keeps downloads same-origin (no new tab / CORS).
+final String kEngineBaseUrl = _resolveEngineBaseUrl();
+String _resolveEngineBaseUrl() {
+  const fromEnv = String.fromEnvironment('ENGINE_BASE_URL', defaultValue: '');
+  if (fromEnv.isNotEmpty) return fromEnv;
+  final origin = Uri.base.origin;
+  // Fallback for non-web/local runs where origin may be empty.
+  return origin.isNotEmpty && origin.startsWith('http')
+      ? origin
+      : 'http://localhost:3000';
+}
 
 class YTSaveAPIGroup {
   static String getBaseUrl() => kEngineBaseUrl;

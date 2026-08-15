@@ -244,16 +244,41 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             hintText: 'Paste any video link here…',
             hintStyle: GoogleFonts.inter(color: _muted, fontSize: 15),
             prefixIcon: const Icon(Icons.link_rounded, color: _muted),
-            suffixIcon: IconButton(
-              tooltip: 'Paste',
-              icon: const Icon(Icons.content_paste_rounded,
-                  color: _muted, size: 20),
-              onPressed: () async {
-                final data = await Clipboard.getData('text/plain');
-                if (data?.text != null) {
-                  _model.textController.text = data!.text!;
-                  safeSetState(() {});
+            suffixIcon: ValueListenableBuilder<TextEditingValue>(
+              valueListenable: _model.textController!,
+              builder: (context, value, _) {
+                if (value.text.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: TextButton.icon(
+                      onPressed: () async {
+                        final data =
+                            await Clipboard.getData('text/plain');
+                        final t = data?.text?.trim() ?? '';
+                        if (t.isNotEmpty) {
+                          _model.textController!.text = t;
+                          safeSetState(() {});
+                        }
+                      },
+                      icon: const Icon(Icons.content_paste_rounded,
+                          size: 18, color: _accent),
+                      label: Text('Paste',
+                          style: GoogleFonts.inter(
+                              color: _accent,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13)),
+                    ),
+                  );
                 }
+                return IconButton(
+                  tooltip: 'Clear',
+                  icon: const Icon(Icons.close_rounded,
+                      color: _muted, size: 20),
+                  onPressed: () {
+                    _model.textController!.clear();
+                    safeSetState(() {});
+                  },
+                );
               },
             ),
           ),
