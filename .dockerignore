@@ -1,0 +1,11 @@
+build/
+.dart_tool/
+.git/
+node_modules/
+ios/
+android/
+macos/
+windows/
+linux/
+*.iml
+.idea/
