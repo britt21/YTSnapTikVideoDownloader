@@ -1,7 +1,9 @@
 # Frontend-only Railway deploy.
 # Builds the Flutter web app pointing at the ENGINE running on the OTHER Railway
 # server, then serves the static build. The engine (API + downloads) is NOT here.
-FROM ghcr.io/cirruslabs/flutter:stable AS build
+# Pinned to match the local toolchain — 'stable' (3.44+) breaks font_awesome_flutter
+# and page_transition (IconData became final; CupertinoPageTransitionsBuilder changed).
+FROM ghcr.io/cirruslabs/flutter:3.41.6 AS build
 WORKDIR /app
 COPY . .
 RUN flutter pub get
