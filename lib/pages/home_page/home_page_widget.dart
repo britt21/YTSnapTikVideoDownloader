@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/flutter_flow/analytics.dart';
 import '/components/res_componenet_widget.dart';
 import '/components/res_componenetmp3_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -52,6 +53,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   Future<void> _search() async {
     final url = _model.textController.text.trim();
     if (url.isEmpty || _isSearching) return;
+    // Track which site the user pasted from (platform category + exact domain).
+    saTrack('paste_link', {
+      'platform': platformOf(url),
+      'domain': domainOf(url),
+    });
     FocusScope.of(context).unfocus();
     safeSetState(() => _isSearching = true);
     _model.resolutionsResponse =

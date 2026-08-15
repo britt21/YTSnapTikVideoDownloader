@@ -6,6 +6,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '/backend/api_requests/api_calls.dart' show kEngineBaseUrl;
+import 'analytics.dart';
 
 Future<void> downloadWithProgress(
   BuildContext context, {
@@ -14,6 +15,14 @@ Future<void> downloadWithProgress(
   required bool isAudio,
 }) async {
   if (url.trim().isEmpty) return;
+
+  // User selected a format and pressed Download — the key conversion event.
+  final platform = platformOf(url);
+  saTrack('select_format', {
+    'platform': platform,
+    'type': isAudio ? 'mp3' : 'video',
+    'resolution': fomat,
+  });
 
   final progress = ValueNotifier<double>(0);
   final status = ValueNotifier<String>('Starting…');
@@ -76,6 +85,11 @@ Future<void> downloadWithProgress(
         ..style.display = 'none'
         ..click();
     } catch (_) {}
+    saTrack('download_success', {
+      'platform': platform,
+      'type': isAudio ? 'mp3' : 'video',
+      'resolution': fomat,
+    });
     es?.close();
     closeDialog();
   });
@@ -89,6 +103,11 @@ Future<void> downloadWithProgress(
           ?.toString();
     } catch (_) {}
     finished = true;
+    saTrack('download_error', {
+      'platform': platform,
+      'type': isAudio ? 'mp3' : 'video',
+      'resolution': fomat,
+    });
     es?.close();
     closeDialog();
     if (context.mounted) {
