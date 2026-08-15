@@ -56,7 +56,23 @@
   <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#f1f4f8">
 
   <link rel="manifest" href="manifest.json">
-  
+
+  <!-- Google Analytics 4 (gtag.js) with Consent Mode — nothing tracks until the user accepts. -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PG7SRWH0DF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    // Analytics granted by default so every visitor is counted on arrival
+    // (implied-consent model). Ads stay denied — we don't run ad personalization.
+    gtag('consent', 'default', {
+      ad_storage: 'denied', analytics_storage: 'granted',
+      ad_user_data: 'denied', ad_personalization: 'denied'
+    });
+    gtag('config', 'G-PG7SRWH0DF', { anonymize_ip: true });
+    // Helper the Flutter app calls to log custom events.
+    window.saTrack = function(name, params){ try { gtag('event', name, params || {}); } catch (e) {} };
+  </script>
 </head>
 <body>
   <!-- SEO content: crawlable by Google; covered by Flutter's full-screen view for real users. -->
@@ -98,6 +114,58 @@
     {{flutter_bootstrap_js}}
   </script>
 
+  <!-- Informational cookie notice (non-blocking). Analytics runs regardless; this is a courtesy notice. -->
+  <div id="sa-consent" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:2147483647;
+       background:rgba(15,18,32,.97);color:#eef2ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+       backdrop-filter:blur(6px);border-top:1px solid rgba(255,255,255,.12);box-shadow:0 -8px 30px rgba(0,0,0,.35)">
+    <div style="max-width:920px;margin:0 auto;padding:14px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+      <span style="font-size:14px;line-height:1.5;flex:1 1 300px;color:#c7cfe6">
+        We use cookies to measure traffic and improve Easy Saver.
+      </span>
+      <button id="sa-ok" style="padding:10px 20px;border-radius:10px;border:0;color:#fff;font-weight:700;font-size:14px;
+              cursor:pointer;background:linear-gradient(90deg,#6d8bff,#8b5cf6);flex:0 0 auto">Got it</button>
+    </div>
+  </div>
+  <script>
+    (function(){
+      var el = document.getElementById('sa-consent');
+      var dismissed;
+      try { dismissed = localStorage.getItem('sa_notice'); } catch(e){}
+      if (!dismissed && el) el.style.display = 'block';
+      var ok = document.getElementById('sa-ok');
+      if (ok) ok.addEventListener('click', function(){
+        try { localStorage.setItem('sa_notice', '1'); } catch(e){}
+        if (el) el.style.display = 'none';
+      });
+    })();
+  </script>
+
+  <!-- ================= Adsterra monetization ================= -->
+  <!-- Popunder (triggers on user interaction; no visible footprint) -->
+  <script src="https://pl30861807.effectivecpmnetwork.com/c7/90/33/c790330ee1eb277bc0b5bca59904b024.js"></script>
+
+  <!-- Smartlink: floating "Download HD / Fast" button -->
+  <a id="ad-smartlink" href="https://www.effectivecpmnetwork.com/khu5k88b?key=8d589ec8c25a50618edf19113578fa4c"
+     target="_blank" rel="noopener sponsored"
+     style="position:fixed;right:14px;bottom:104px;z-index:2147483001;padding:12px 18px;border-radius:999px;
+            background:linear-gradient(90deg,#22c55e,#16a34a);color:#fff;font-weight:700;font-size:14px;
+            font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;text-decoration:none;
+            box-shadow:0 8px 24px rgba(0,0,0,.4);display:inline-flex;align-items:center;gap:7px">
+    ⚡ Download HD / Fast
+  </a>
+
+  <!-- Native Banner: fixed bottom strip (dismissible) -->
+  <div id="ad-native"
+       style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;background:rgba(15,18,32,.96);
+              border-top:1px solid rgba(255,255,255,.1);padding:8px 40px 8px 10px;max-height:38vh;overflow:auto">
+    <button aria-label="Close ad" onclick="var n=document.getElementById('ad-native');if(n)n.style.display='none';"
+            style="position:absolute;top:6px;right:8px;width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+                   background:rgba(0,0,0,.3);color:#cbd5e1;font-size:15px;line-height:1;cursor:pointer">×</button>
+    <script async="async" data-cfasync="false"
+            src="https://pl30861809.effectivecpmnetwork.com/0d0591984f8ca0e05e8aa1dab9c23c94/invoke.js"></script>
+    <div id="container-0d0591984f8ca0e05e8aa1dab9c23c94"></div>
+  </div>
+  <!-- =============== end Adsterra monetization =============== -->
 
 </body>
 </html>
