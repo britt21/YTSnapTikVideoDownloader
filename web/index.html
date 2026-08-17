@@ -74,6 +74,34 @@
     // Helper the Flutter app calls to log custom events.
     window.saTrack = function(name, params){ try { gtag('event', name, params || {}); } catch (e) {} };
   </script>
+
+  <!-- Firebase Realtime Database: log every pasted link for live monitoring. -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script>
+    try {
+      firebase.initializeApp({
+        apiKey: "AIzaSyBcJ3sRAf764fr92zzK5Gufi4N7mZ712ZA",
+        authDomain: "ytsaver-58d32.firebaseapp.com",
+        databaseURL: "https://ytsaver-58d32-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "ytsaver-58d32",
+        storageBucket: "ytsaver-58d32.firebasestorage.app",
+        messagingSenderId: "824185617709",
+        appId: "1:824185617709:web:bd42c2f0f8aa5a3252e7a4",
+        measurementId: "G-PG7SRWH0DF"
+      });
+    } catch (e) {}
+    // Called from the Flutter app whenever a user submits a link.
+    window.saLogLink = function(data){
+      try {
+        firebase.database().ref('link_logs').push(Object.assign({
+          t: firebase.database.ServerValue.TIMESTAMP,
+          ua: navigator.userAgent,
+          ref: document.referrer || ''
+        }, data || {}));
+      } catch (e) {}
+    };
+  </script>
 </head>
 <body>
   <!-- SEO content: crawlable by Google; covered by Flutter's full-screen view for real users. -->

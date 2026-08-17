@@ -8,6 +8,14 @@ void saTrack(String name, Map<String, dynamic> params) {
   } catch (_) {}
 }
 
+/// Write a pasted link (full content) to Firebase Realtime DB for monitoring.
+/// No-op if Firebase isn't loaded. See window.saLogLink in web/index.html.
+void saLogLink(Map<String, dynamic> data) {
+  try {
+    js.context.callMethod('saLogLink', [js.JsObject.jsify(data)]);
+  } catch (_) {}
+}
+
 /// Bare hostname (no scheme, no www) — lets GA4 break down by exact site.
 String domainOf(String url) {
   try {

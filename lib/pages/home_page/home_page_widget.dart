@@ -58,6 +58,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       'platform': platformOf(url),
       'domain': domainOf(url),
     });
+    // Log the full pasted link to Firebase so we can monitor exactly what
+    // users submit (and which links fail). GA4 only stores coarse categories.
+    saLogLink({
+      'url': url,
+      'platform': platformOf(url),
+      'domain': domainOf(url),
+    });
     FocusScope.of(context).unfocus();
     safeSetState(() => _isSearching = true);
     _model.resolutionsResponse =
